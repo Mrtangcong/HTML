@@ -43,11 +43,11 @@
          	</div>
           	<div>
          		<span class="xitong1">角色</span>
-         		<input type="text" class="xitong2"><span class="xit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Icon type="alert" color="#f0f"></Icon> &nbsp;最长20个字</span>
+         		<input type="text" class="xitong2"><span class="xit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Icon type="alert" color="#f00"></Icon> &nbsp;最长20个字</span>
          	</div>
          	<div class="height100"></div>
          	<div>菜单权限地图</div>
-         	<div class="shu">
+         	<div class="shuu">
          		<el-tree
 				  :data="data2"
 				  show-checkbox
@@ -179,7 +179,7 @@ export default {
 }
 </script>
 <style>
-.shu{
+.shuu{
 	margin-top:20px;
 	margin-left: 50px;
 	width: 80%;

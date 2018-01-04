@@ -4,6 +4,8 @@
       <el-tag closable class="tag">菜单管理</el-tag>
     </div>
     <div class="height100"></div>
+    <div class="height100"></div>
+    <div class="height100"></div>
     <div class="shu">
     	<el-tree
 		  :data="data4"

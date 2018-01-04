@@ -48,19 +48,20 @@ html,body,#app{
     text-decoration: none;
   }
   .logo{
-    width: 17%;
+    width: 10%;
     height: 63px;
     border-right:1px solid #000;
     display: inline-block;
-    background: url('../static/logo.jpg') no-repeat 10px 6px ;
-    background-size:80%;
+    background: url('../static/logo.jpg') no-repeat -2px 16px ;
+    background-color: 293038;
+    background-size:100%;
     vertical-align: top;
     position: fixed;
     top:0;
     left: 0;
   }
   .logo-c{
-    width: 17%;
+    width: 10%;
     height: 63px;
     display: inline-block;
     vertical-align: top;
@@ -69,20 +70,23 @@ html,body,#app{
     position: fixed;
     top:0;
     padding-left:40px;
-    width: 79%;
+    width: 90%;
     display: inline-block;
+    z-index: 10;
   }
   .routc{
     width: 100%;
     display: inline-block;
-    height: 63px;
+    height: 58px;
   }
   .rout a{
     display: inline-block;
-    padding: 18px 20px 18px;
+    box-sizing: border-box;
+    padding: 17px 20px 17px;
     text-decoration: none;
     color: #495060;
     font-size: 18px;
+    color: #fff;
   }
   .lv{
     color: #2d8cf0;
@@ -94,34 +98,37 @@ html,body,#app{
     z-index: 10;
     top:0;
     border-bottom:1px solid #000;
-    background: #fff;
+    background: #293038;
+
   }
   .height100{
-    height: 100px;
+    height: 60px;
   }
   .height50{
-    height: 50px;
+    height: 20px;
   }
   .aside{
-  width: 17%;
+  width: 10%;
   height: 100%;
   position: fixed;
-  background: #000;
+  background: #293038;
   top: 63px;
   left:0;
 
 }
 .asidee{
-  width: 17%;
+  width: 10%;
   vertical-align: top;
   display: inline-block;
+  float: left;
+  height: 100%;
 }
 .title{
   text-align: center;
   color: #fff;
   line-height: 63px;
   font-size: 20px;
-  background: #495060;
+  background:#3b963b;
 }
 .asied-C{
   padding: 14px 24px;
@@ -132,7 +139,7 @@ html,body,#app{
 }
 .asidea{
   display: inline-block;
-  width: 82%;
+  width: 90%;
 }
 .tag{
   margin-top: 10px;
@@ -165,8 +172,11 @@ html,body,#app{
   line-height: 50px;
   width: 1550px;
 }
-.liebiao{
-  overflow-x: scroll;
+.tr button,.tr span{
+  vertical-align: middle;
+}
+.xit{
+  color: #ccc;
 }
 .xitong1{
   display: inline-block;
@@ -195,5 +205,15 @@ html,body,#app{
 }
 .zhongyao{
   color: #f0f;
+}
+.tag-b{
+  background: #ccc;
+  position: fixed;
+  width: 100%;
+  top: 64px;
+  z-index: 10;
+}
+.tag{
+  background: #FFF;
 }
 </style>

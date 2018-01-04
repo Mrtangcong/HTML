@@ -1,7 +1,7 @@
 <template>
   <div>
   	<div class="navimg"></div>
-  	<div class="height50"></div>
+  	<div class="height100"></div>
   	<div>
   		<Button type="ghost" style="margin-right:-5px;vertical-align: top;">部门</Button>
   		<Select v-model="model1" style="width:150px;margin-right:45px;">
@@ -19,7 +19,6 @@
   		<Select v-model="model4" style="width:150px;margin-right:45px;" >
 	        <Option v-for="item in cityList2" :value="item.value" :key="item.value">{{ item.label }}</Option>
 	    </Select>
-	    <input  name="file" type="file" accept="image/png,image/gif,image/jpeg" @change="update"/>
   	</div> 
   	<div style="margin-top:50px;">
   		<Button type="ghost" style="margin-right:-5px;vertical-align: top;">用户名</Button>
@@ -84,11 +83,11 @@
     <Modal v-model="zhuxiaoyuangong" title="注销帐号" :mask-closable="false" ok-text="确定注销" @on-ok="ok">
           <div>你确定要注销员工"{{list1.c2}}"的帐号?</div>
     </Modal>
-    <Modal v-model="xinzenghaoyou" title="新增员工" :mask-closable="false" ok-text="确定注销" @on-ok="ok">
-    	  	<div class="tuoshan"><Icon type="android-alert" color="#f00"></Icon>请妥善保管好员工的密码</div>
+    <Modal v-model="xinzenghaoyou" title="新增员工" :mask-closable="false" ok-text="确定注销" @on-ok="ok" width="570px">
+    	  	<div class="tuoshan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Icon type="android-alert" color="#f00"></Icon>&nbsp;&nbsp;请妥善保管好员工的密码</div>
           	<div><span class="xitong1">部门</span>
-      		 <Select v-model="model6" style="width:200px">
-				<Option v-for="item in cityList4" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      		 <Select v-model="model6" multiple style="width:200px">
+			   <Option v-for="item in cityList4" :value="item.value" :key="item.value">{{ item.label }}</Option>
     		 </Select>
     		</div>
     		<div><span class="xitong1">角色</span>
@@ -101,12 +100,14 @@
 				<Option v-for="item in cityList6" :value="item.value" :key="item.value">{{ item.label }}</Option>
     		 </Select>
     		</div>
-            <div><span class="xitong1">用户名</span> <input type="text" class="xitong2" v-model="input1"></div>
-            <div><span class="xitong1">菜单名称</span> <input type="text" class="xitong2" v-model="input1"></div>
-            <div><span class="xitong1">菜单地址</span> <input type="text" class="xitong2" v-model="input1"></div>
-            <div><span class="xitong1">排序</span> <input type="text" class="xitong2"><span class="xit"><Icon type="alert" color="#f0f"></Icon> &nbsp;选填 默认按顺序取</span></div>
-            <div><span class="xitong1">菜单图标</span> <input type="text" class="xitong2"></div>
-            <div><span class="xitong1">备注</span> <input type="text" class="xitong2 xitong3"></div>
+            <div><span class="xitong1">用户名</span> <input type="text" class="xitong2" v-model="input1">
+            	<span class="xit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Icon type="alert" color="#f00"></Icon> &nbsp;最长20个字,设置后不许修改</span>
+            </div>
+            <div><span class="xitong1">手机号码</span> <input type="text" class="xitong2" v-model="input2"></div>
+            <div><span class="xitong1">身份证号</span> <input type="text" class="xitong2" v-model="input3"></div>
+            <div><span class="xitong1">设置密码</span> <input type="text" class="xitong2" v-model="input4">
+            	<Button type="info" style="margin-top:-8px" @click="mima">随机生成有效密码</Button>
+            </div>
     </Modal>
   </div>
 </template>	
@@ -124,16 +125,19 @@ export default {
       value1:'',
       value2:'',
       value3:'',
-      model6:'',
+      model6:[],
       model7:'',
       model8:'',
-
+      input1:'',
+      input2:'',
+      input3:'',
+      input4:'',
       vertical:'apple',
       chongzh:false,
       dongjie:false,
       jiedong:false,
       xinzenghaoyou:false,
-      xinzenghaoyou:false,
+      zhuxiaoyuangong:false,
       cityList:[
       		{
                 value: 'New York1',
@@ -277,34 +281,19 @@ export default {
   	xinzeng(){
   		this.xinzenghaoyou = true;
   	},
+  	mima(){
+  		var that = this;
+  		axios.post('http://192.168.1.109:54/oss/user/createRandomPwd')
+  		.then(res=>{
+  			if(res.data.success === true){
+  				that.input4 =res.data.data
+  			}
+  		})
+  	},
   	zhuxiao(index){
   		this.list1 = this.list[index]
   		this.zhuxiaoyuangong = true;
-  	},update (e) {   // 上传照片
-      var self = this
-      let file = e.target.files[0]
-      /* eslint-disable no-undef */
-      let param = new FormData()  // 创建form对象
-      param.append('file', file)  // 通过append向form对象添加数据
-      param.append('wenzi',{application:'123'}) // 添加form表单中其他数据
-      console.log(param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
-      let config = {
-        headers: {'Content-Type': 'multipart/form-data'}
-      }
-      
-
-     // 添加请求头
-    axios.post('http://192.168.1.109:54/oss/project/add', param , config)
-        .then(response => {
-          if (response.data.code === 0) {
-            self.ImgUrl = response.data.data
-          }
-          console.log(response.data)
-        })
-        .catch(res=>{
-        	console.log(res)
-        })
-    }
+  	},
   }
 }
 </script>
@@ -319,5 +308,8 @@ export default {
 	text-indent: 5px;
 	margin: 5px 0 10px 10px;
 	color: #ccc;
+}
+.xitong2{
+	color: #000;
 }
 </style>
