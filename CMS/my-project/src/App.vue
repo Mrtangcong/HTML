@@ -48,7 +48,7 @@ html,body,#app{
     text-decoration: none;
   }
   .logo{
-    width: 10%;
+    width: 200px;
     height: 63px;
     border-right:1px solid #000;
     display: inline-block;
@@ -61,7 +61,7 @@ html,body,#app{
     left: 0;
   }
   .logo-c{
-    width: 10%;
+    width: 200px;
     height: 63px;
     display: inline-block;
     vertical-align: top;
@@ -70,7 +70,7 @@ html,body,#app{
     position: fixed;
     top:0;
     padding-left:40px;
-    width: 90%;
+    width: 80%;
     display: inline-block;
     z-index: 10;
   }
@@ -108,16 +108,16 @@ html,body,#app{
     height: 20px;
   }
   .aside{
-  width: 10%;
+  width: 200px;
   height: 100%;
   position: fixed;
   background: #293038;
   top: 63px;
   left:0;
-
+  z-index:10;
 }
 .asidee{
-  width: 10%;
+  width: 200px;
   vertical-align: top;
   display: inline-block;
   float: left;
@@ -139,7 +139,7 @@ html,body,#app{
 }
 .asidea{
   display: inline-block;
-  width: 90%;
+  width: 80%;
 }
 .tag{
   margin-top: 10px;
@@ -192,6 +192,7 @@ html,body,#app{
   width: 200px;
   border-radius: 3px;
   height: 30px;
+  line-height: 30px;
   border:1px solid #ccc;
   text-align: center;
   color: #ccc;

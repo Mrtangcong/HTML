@@ -8,8 +8,8 @@
     <el-button type="primary">系统名称</el-button>
      <el-select v-model="value1" placeholder="请选择">
       <el-option
-        v-for="item in options"
-        :key="item.id"
+        v-for="(item,index) in options"
+        :key="index"
         :label="item.application"
         :value="item.id">
       </el-option>
@@ -33,7 +33,7 @@
             <span style="width:150px">描述</span>
           </div>
           <div class="tr" v-for="(item,index) in list">
-            <el-button type="primary" size="mini">启用/停用</el-button>
+            <el-button type="primary" size="mini" @click="qiting(index)">启用/停用</el-button>
             <el-button type="primary" size="mini" @click="shenyong(index)">审核</el-button>
             <el-button type="primary" size="mini" @click="shanchu(index)">删除</el-button>
             <span style="width:140px;">{{item.application}}</span>
@@ -43,7 +43,7 @@
             <span style="width:180px;">{{item.createDate}}</span>
             <span style="width:190px;">{{item.modifiedDate}}</span>
             <span style="width:100px;">{{item.c7}}</span>
-            <span style="width:100px;">{{item.c8}}</span>
+            <span style="width:100px;">{{item.status}}</span>
             <span style="width:150px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{item.appDesc}}</span>
           </div>
     </div>
@@ -76,12 +76,15 @@
               </div>
       </Modal>
       <Modal v-model="modal3" title="删除系统" :mask-closable="false">
-          <div>你确定要删除系统"{{list2.c2}}"?</div>
+          <div>你确定要删除系统"{{list2.application}}"?</div>
           <div>一旦删除信息无法恢复，请谨慎操作！</div>
           <div slot="footer">
             <Button type="error" size="large"  @click="guanbi2">取消</Button>
             <Button type="info" size="large"  @click="shanchuc">确定删除</Button>
           </div>
+      </Modal>
+      <Modal v-model="modal8" :title="this.qitong" :mask-closable="false" :ok-text="'确定' + this.qitong" @on-ok="ok1">
+          <div>你确定要{{this.qitong}}系统"{{list2.application}}"?</div>
       </Modal>
       <Modal v-model="modal4" title="系统审核"  width="380px">
         <div><span class="xitong1">系统编号</span> <span class="xitong2">{{list2.c2}}</span></div>
@@ -110,6 +113,7 @@ export default {
       modal2:false,
       modal3:false,
       modal4:false,
+      modal8:false,
       options:[],
       list2:{},
       list3:{},
@@ -122,6 +126,7 @@ export default {
       inp6:'',
       value1:'',
       ImgUrl:'',
+      qitong:'',
     }
   },mounted(){
     var that = this;
@@ -166,13 +171,13 @@ export default {
       var d = this.inp4;
       var e = this.inp5;
       var f = this.inp6;
-
       axios.post('http://192.168.1.109:54/oss/project/add',{"application":a,"appAddr":b,"appIcon":that.ImgUrl,"appAuthor":d,"mobile":e,"appDesc":f})
       .then(function(res){
         console.log(res)
         if(res.data.success == true){
           that.modal2 = false
           that.$Message.success('上传成功')
+
           axios.post('http://192.168.1.109:54/oss/project/getAll')
           .then(function(res){
             console.log(res)
@@ -186,12 +191,26 @@ export default {
       // this.$Message.success('新增请求成功')
       
     },
+    ok1(){
+      var that = this;
+      axios.post('http://192.168.1.109:54/oss/project/' +that.list2.id  + '/startStop/'+that.list2.oppStatusValue)
+      .then(function(res){
+        console.log(res)
+        that.$Message.success('成功');
+        axios.post('http://192.168.1.109:54/oss/project/getAll')
+      .then(function(res){
+        console.log(res)
+        that.options = res.data.data
+        that.list = res.data.data
+
+      })
+      })
+    },
     xinzeng(){
       this.modal2 = true;
     },
     shanchu(index){
       this.list2 = this.list[index]
-      console.log(this.list2)
       this.modal3 = true;
     },
     shenyong(index){
@@ -208,19 +227,46 @@ export default {
         that.list = res.data.data
       })
     },
+    qiting(index){
+      this.modal8 = true;
+      this.list2 = this.list[index]
+      if(this.list2.oppStatusValue == 1 ){
+        this.qitong = '停用'
+      }else if(this.list2.oppStatusValue == 0){
+        this.qitong = '启用'
+      }
+    },
     chaxun(){
       var that = this;
       axios.post('http://192.168.1.109:54/oss/project/getAll')
       .then(function(res){
         console.log(res)
         that.list = res.data.data
-        var c =  that.list[(that.value1-1)]
+        var a = parseInt(that.value1);
+        console.log(a)
+        var c = that.list
+        console.log(c)
+        console.log(c[a])
         that.list = [];
         that.list.push(c)
       })
 
     },shanchuc(){
-
+      var that = this;
+      var a = that.list2.id
+      axios.post('http://192.168.1.109:54/oss/project/'+ a  + '/delete')
+      .then(function(res){
+        if(res.data.success == true){
+            that.modal3 = false;
+            that.$Message.success('删除成功');
+            axios.post('http://192.168.1.109:54/oss/project/getAll')
+            .then(function(res){
+              console.log(res)
+              that.options = res.data.data
+              that.list = res.data.data
+            })
+        }
+      })
     },update (e) {   // 上传照片
       var self = this
       let file = e.target.files[0]

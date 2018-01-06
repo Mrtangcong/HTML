@@ -88,6 +88,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'Cur-3',
   data () {
@@ -99,11 +100,8 @@ export default {
       modal5:false,
       model6:'',
       list1:{},
-      list:[
-      	{c1:"业务系统",c2:"催收人员",c3:"10"},
-      	{c1:"业务系统",c2:"催收人员",c3:"20"},
-      	{c1:"业务系统",c2:"催收人员",c3:"30"}
-      ],cityList:[
+      list:[],
+      cityList:[
       	{
             value: 'New York',
             label: 'New York'
@@ -152,7 +150,15 @@ export default {
           label: 'label'
         }
       };
-  },methods:{
+  },mounted(){
+  	var that = this;
+  	axios.post('http://192.168.1.109:54/oss/role/getAll')
+    .then(function(res){
+      console.log(res)
+      that.list = res.data.data
+    })
+  },
+  methods:{
   	shanchu(index){
   		this.modal1 = true;
 
