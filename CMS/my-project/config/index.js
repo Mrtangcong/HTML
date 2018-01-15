@@ -10,7 +10,13 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+        '/oss': {//需要匹配的路径
+                    target: 'http://192.168.1.209:54', //需要代理的目标服务器
+            　　　　 changeOrigin: true, //开启代理
+             　　　　pathRewrite: { '^/oss': '/oss' }  //这里重写路径/run就代理到对应地址
+            　　},
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

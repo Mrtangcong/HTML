@@ -1,12 +1,12 @@
 <template>
   <div class="asidea">
-    <div class="tag-b">
-      <el-tag closable class="tag">组织结构</el-tag>
+   <div class="tag-b">
+      你当前位置 ：员工管理
     </div>
-    <div class="height50"></div>
+    <div class="height100"></div>
     <div class="Cur-r-r">
-    	<router-link to="/Cur/Customer-4/Customers" active-class="Cur" class="Cur-r">部门结构</router-link>
-        <router-link to="/Cur/Customer-4/Customerc" active-class="Cur" class="Cur-r">员工列表</router-link>
+    	<!-- <router-link to="/Cur/Customer-4/Customers" active-class="Cur" class="Cur-r">部门结构</router-link> -->
+        
     </div>
     <router-view/>
   </div>
@@ -25,6 +25,7 @@ export default {
 <style>
 .Cur-r-r{
 	margin-top: 20px;
+
 }
 .Cur-r{
 	display: inline-block;

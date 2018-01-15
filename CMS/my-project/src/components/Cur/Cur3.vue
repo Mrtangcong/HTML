@@ -1,16 +1,32 @@
 <template>
   <div class="asidea">
     <div class="tag-b">
-      <el-tag closable class="tag">角色管理</el-tag>
+      你当前位置 ：角色管理
     </div>
     <div class="height100"></div>
     <el-button type="primary">所属系统</el-button>
+    <el-select v-model="value1" placeholder="请选择">
+      <el-option
+        v-for="(item,index) in options"
+        :key="index"
+        :label="item.application"
+        :value="item.id">
+      </el-option>
+    </el-select>
     <el-button type="primary">角色</el-button>
+    <el-select v-model="value2" placeholder="请选择">
+      <el-option
+        v-for="(item,index) in options1"
+        :key="index"
+        :label="item.roleDesc"
+        :value="item.id">
+      </el-option>
+    </el-select>
    <div class="height100"></div>
-    <el-button type="primary">查询</el-button>
-    <el-button type="primary">重置</el-button>
+    <el-button type="primary" @click="chaxun">查询</el-button>
+    <el-button type="primary" @click="chongzhi">重置</el-button>
     <el-button type="primary" @click="xinzeng">新增</el-button>
-    <div class="liebiao" style="overflow:auto">
+    <div class="liebiao">
           <div class="btitle" style="width:auto">
             <span style="width:130px;border-right:1px dashed #ccc">操作</span>
             <span style="width:140px;border-right:1px dashed #ccc">所属系统</span>
@@ -19,67 +35,76 @@
           </div>
           <div class="tr" v-for="(item,index) in list" style="width:auto">
           	<el-button type="primary" size="mini" @click="shanchu(index)">删除</el-button>
-            <el-button type="primary" size="mini" @click="bianji(index)">编辑</el-button>
+            <el-button type="primary" size="mini" @click="bianji(item)">编辑</el-button>
             
-            <span style="width:140px">{{item.c1}}</span>
-            <span style="width:140px">{{item.c2}}</span>
-            <span style="width:140px">{{item.c3}}</span>
+            <span style="width:140px">{{item.appName}}</span>
+            <span style="width:140px">{{item.roleDesc}}</span>
+            <span style="width:140px">{{item.userCount}}</span>
           </div>
     </div>
     <Modal v-model="modal1" title="删除菜单" :mask-closable="false">
-          <div>你确定要删除系统"{{list1.c3}}"?</div>
+          <div>你确定要删除菜单"{{list1.roleDesc}}"?</div>
           <div>一旦删除信息无法恢复，请谨慎操作！</div>
           <div slot="footer">
             <Button type="error" size="large"  @click="guanbi2">取消</Button>
-            <Button type="info" size="large"  @click="shanchu(list.id)">确定删除</Button>
+            <Button type="info" size="large"  @click="shanchu1(list.id)">确定删除</Button>
           </div>
     </Modal>
     <Modal v-model="modal2" title="编辑角色" :mask-closable="false" @on-ok="queding">
          	<div>
          		<span class="xitong1">所属系统</span>
-         		<Select v-model="model3" style="width:200px">
-					<Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-	    		</Select>
+         		<el-select v-model="model3" placeholder="请选择">
+			      <el-option
+			        v-for="(item,index) in options"
+			        :key="item.role"
+			        :label="item.role"
+			        :value="item.id">
+			      </el-option>
+			    </el-select>
          	</div>
           	<div>
          		<span class="xitong1">角色</span>
-         		<input type="text" class="xitong2"><span class="xit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Icon type="alert" color="#f00"></Icon> &nbsp;最长20个字</span>
+         		<input type="text" class="xitong2" v-model="model4"><span class="xit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Icon type="alert" color="#f00"></Icon> &nbsp;最长20个字</span>
          	</div>
          	<div class="height100"></div>
          	<div>菜单权限地图</div>
          	<div class="shuu">
          		<el-tree
-				  :data="data2"
+				  :data="data3"
 				  show-checkbox
 				  default-expand-all
 				  node-key="id"
-				  ref="tree"
-				  highlight-current
-				  :props="defaultProps">
+				  :props="defaultProps"
+				  ref="tree1"
+				  >
 				</el-tree>
          	</div>
     </Modal>
-    <Modal v-model="modal5" title="编辑角色" :mask-closable="false" @on-ok="xinzengqueding">
+    <Modal v-model="modal5" title="新增角色" :mask-closable="false" @on-ok="xinzengqueding">
          	<div>
          		<span class="xitong1">所属系统</span>
-         		<Select v-model="model6" style="width:200px">
-					<Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-	    		</Select>
+         		<el-select v-model="model3" placeholder="请选择">
+			      <el-option
+			        v-for="(item,index) in options"
+			        :key="item.application"
+			        :label="item.application"
+			        :value="item.id">
+			      </el-option>
+			    </el-select>
          	</div>
           	<div>
          		<span class="xitong1">角色</span>
-         		<input type="text" class="xitong2"><span class="xit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Icon type="alert" color="#f0f"></Icon> &nbsp;&nbsp;最长20个字</span>
+         		<input type="text" class="xitong2" v-model="inpu1" style="color:#555;width:220px;height:36px;line-height:36px"><span class="xit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Icon type="alert" color="#f0f"></Icon> &nbsp;&nbsp;最长20个字</span>
          	</div>
          	<div class="height100"></div>
          	<div>菜单权限地图</div>
-         	<div class="shu">
+         	<div>
          		<el-tree
 				  :data="data2"
 				  show-checkbox
 				  default-expand-all
 				  node-key="id"
 				  ref="tree3"
-				  highlight-current
 				  :props="defaultProps">
 				</el-tree>
          	</div>
@@ -89,6 +114,7 @@
 
 <script>
 import axios from 'axios'
+import apidomain from '../../router/luyou.js'
 export default {
   name: 'Cur-3',
   data () {
@@ -101,61 +127,66 @@ export default {
       model6:'',
       list1:{},
       list:[],
-      cityList:[
-      	{
-            value: 'New York',
-            label: 'New York'
-        },
-        {
-            value: 'London',
-            label: 'London'
-        }
-      ],data2: [{
-          id: 1,
-          label: '一级 1',
-          children: [{
-            id: 4,
-            label: '二级 1-1',
-            children: [{
-              id: 9,
-              label: '三级 1-1-1'
-            }, {
-              id: 10,
-              label: '三级 1-1-2'
-            }]
-          }]
-        }, {
-          id: 2,
-          label: '一级 2',
-          children: [{
-            id: 5,
-            label: '二级 2-1'
-          }, {
-            id: 6,
-            label: '二级 2-2'
-          }]
-        }, {
-          id: 3,
-          label: '一级 3',
-          children: [{
-            id: 7,
-            label: '二级 3-1'
-          }, {
-            id: 8,
-            label: '二级 3-2'
-          }]
-        }],
+      options:[],
+      options1:[],
+      cityList:[],
+      value1:'',
+      value2:'',
+      inpu1:'',
+      data2: [],
+      data3:[],
+      list123:[],
+      header:{},
+      username:'',
+      token:'',
         defaultProps: {
           children: 'children',
           label: 'label'
         }
       };
   },mounted(){
+
   	var that = this;
-  	axios.post('http://192.168.1.109:54/oss/role/getAll')
+  	that.username=localStorage.getItem("token")
+    that.token=localStorage.getItem("tokens")
+    axios({
+        method:'POST',
+        baseURL:(apidomain.apidomain + 'oss/project/getAll'),
+        headers:{"sso_token":that.token,"sso_loginname":that.username},
+    })
     .then(function(res){
-      console.log(res)
+     
+      that.options = res.data.data
+    })
+    var that = this;
+    axios({
+        method:'POST',
+        baseURL:(apidomain.apidomain + 'oss/role/getAll'),
+        headers:{"sso_token":that.token,"sso_loginname":that.username},
+    })
+    .then(function(res){
+     
+      that.options1 = res.data.data
+    })
+    axios({
+        method:'POST',
+        baseURL:(apidomain.apidomain + 'oss/role/getGroupRole'),
+        headers:{"sso_token":that.token,"sso_loginname":that.username},
+    })
+    .then(function(res){
+      
       that.list = res.data.data
+     
+    })
+    axios({
+        method:'POST',
+        baseURL:(apidomain.apidomain + 'oss/menu/getAllEnable'),
+        headers:{"sso_token":that.token,"sso_loginname":that.username},
+    })
+    .then(function(res){
+     
+      that.data2 = res.data.data
+      that.data3 = res.data.data
     })
   },
   methods:{
@@ -163,24 +194,142 @@ export default {
   		this.modal1 = true;
 
   		this.list1 = this.list[index]
+  		
+  		
 
   	},
+  	shanchu1(){
+  		var that = this;
+  		var a =this.list1.id
+  		axios({
+        method:'POST',
+        baseURL:(apidomain.apidomain + 'oss/role/'+ a + '/delete'),
+        headers:{"sso_token":that.token,"sso_loginname":that.username},
+    })
+	    .then(function(res){
+	    
+	      if(res.data.success == false){
+	      	that.modal1 = false;
+	      	axios({
+		        method:'POST',
+		        baseURL:(apidomain.apidomain + 'oss/role/getGroupRole'),
+		        headers:{"sso_token":that.token,"sso_loginname":that.username},
+		    })
+		    .then(function(res){
+		     
+		      that.list = res.data.data
+		    })
+	      	that.$Message.success('删除成功');
+	      }else{
+	      	that.$Message.error('删除失败');
+	      }
+	    
+	    })	
+  	},
   	bianji(index){
-  		this.modal2 = true;
-  		this.list1 = this.list[index]
+  		var that = this
+		axios({
+		        method:'POST',
+		        baseURL:(apidomain.apidomain + 'oss/role/'+index.id),
+		        headers:{"sso_token":that.token,"sso_loginname":that.username},
+		    })
+	    .then(function(res){
+	     console.log(res)
+	      that.list1 = res.data.data
+	      that.list123 = res.data.data.menuIds 
+	      that.modal2 = true;
+	      that.model4 = res.data.data.roleDesc
+	      that.model3 = res.data.data.application
+	      that.$refs.tree1.setCheckedKeys(that.list123);
+	      
+	    })
+  		
+  		
   	},
   	guanbi2(){
   		this.modal1 =false;
   	},
   	queding(){
-  		console.log(this.$refs.tree.getCheckedKeys())
+  		var that = this;
+  		var a = this.$refs.tree1.getCheckedKeys()
+  		axios({
+		        method:'POST',
+		        baseURL:(apidomain.apidomain + 'oss/role/' + that.list1.id  +'/update'),
+		        headers:{"sso_token":that.token,"sso_loginname":that.username},
+		        data:{
+		        	"application":that.model3,
+		        	"roleDesc":that.model4,
+		        	"menuIds":a
+		        }
+		    })
+	    .then(function(res){
+	     
+	      axios({
+		        method:'POST',
+		        baseURL:(apidomain.apidomain + 'oss/role/getGroupRole'),
+		        headers:{"sso_token":that.token,"sso_loginname":that.username},
+		    })
+		    .then(function(res){
+		     
+		      that.list = res.data.data
+		    })
+	    })
   	},
   	xinzeng(){
   		this.modal5 = true;
   	},
+  	chongzhi(){
+  		var that = this;
+  		this.value2 = '';
+  		this.value1 = '';
+  		axios({
+		        method:'POST',
+		        baseURL:(apidomain.apidomain + 'oss/role/getGroupRole'),
+		        headers:{"sso_token":that.token,"sso_loginname":that.username},
+		    })
+	    .then(function(res){
+	      that.list = res.data.data
+	    })
+  	},
   	xinzengqueding(){
-  		console.log(this.$refs.tree3.getCheckedKeys())
-  	}
+  		var that = this;
+  		var a =this.$refs.tree3.getCheckedKeys()
+  		axios({
+		        method:'POST',
+		        baseURL:(apidomain.apidomain + 'oss/role/add'),
+		        headers:{"sso_token":that.token,"sso_loginname":that.username},
+		        data:{
+		        	"application":that.model3,
+		        	"roleDesc":that.inpu1,
+		        	"menuIds":a
+		        }
+		    })
+	    .then(function(res){
+	     
+	      axios({
+		        method:'POST',
+		        baseURL:(apidomain.apidomain + 'oss/role/getGroupRole'),
+		        headers:{"sso_token":that.token,"sso_loginname":that.username},
+		    })
+		    .then(function(res){
+		     
+		      that.list = res.data.data
+		    })
+	    })
+  	},chaxun(){
+  		var that = this;
+  		var a = this.value1
+  		var b = this.value2
+  		 axios({
+		        method:'POST',
+		        baseURL:(apidomain.apidomain +  'oss/role/getByAppAndRole?appId='+a+'&roleId='+b),
+		        headers:{"sso_token":that.token,"sso_loginname":that.username},
+		    })
+	    .then(function(res){
+	     
+	      that.list = res.data.data
+	    })
+	}
   }
 }
 </script>

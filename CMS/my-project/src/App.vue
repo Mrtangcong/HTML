@@ -1,16 +1,18 @@
 <template>
   <div id="app">
-    <div class="nav">
+    <!-- <router-link to="/login" active-class="lv">登陆</router-link> -->
+  <!--   <div class="nav">
       <div class="logo"></div>
       <div class="logo-c"></div>
       <div class="rout" >
-        <router-link to="/Cur" active-class="lv">系统管理</router-link>
-        <router-link to="/transaction" active-class="lv">交易</router-link>
+       
+        
+        <router-link to="/hello" active-class="lv">1</router-link>
         <router-link to="/Finance" active-class="lv">财务</router-link>
         <router-link to="/Risk" active-class="lv">风控</router-link>
         <router-link to="/collection" active-class="lv">催收</router-link>
         <router-link to="/Statistics" active-class="lv">统计</router-link>
-<!--           <div style="float:right">
+          <div style="float:right">
             <span>
                 <a>
                   {{lock}}
@@ -19,16 +21,17 @@
             <router-link to="/login" style="padding:18px 8px 18px"><Icon type="person-stalker" size="25"></Icon></router-link>
             <a  style="padding:18px 8px 18px" @click="dengchu"><Icon type="log-out" size="25"></Icon></a>
 
-          </div> -->
+          </div>
         </div>
         
     </div>
-    <div class="routc"></div>
+    <div class="routc"></div> -->
     <router-view/>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'app'
 }
@@ -52,8 +55,8 @@ html,body,#app{
     height: 63px;
     border-right:1px solid #000;
     display: inline-block;
-    background: url('../static/logo.jpg') no-repeat -2px 16px ;
-    background-color: 293038;
+    
+    background-color: #293038;
     background-size:100%;
     vertical-align: top;
     position: fixed;
@@ -89,8 +92,8 @@ html,body,#app{
     color: #fff;
   }
   .lv{
-    color: #2d8cf0;
-    border-bottom: 2px solid #2d8cf0;
+    color:#3b963b;
+    border-bottom: 1px solid #3b963b;
   }
   .nav{
     width: 100%;
@@ -108,19 +111,20 @@ html,body,#app{
     height: 20px;
   }
   .aside{
-  width: 200px;
+  width: 13%;
+  min-width: 200px;
   height: 100%;
   position: fixed;
   background: #293038;
-  top: 63px;
+  top: 0;
   left:0;
   z-index:10;
 }
 .asidee{
-  width: 200px;
+  width: 13%;
+  min-width: 200px;
   vertical-align: top;
   display: inline-block;
-  float: left;
   height: 100%;
 }
 .title{
@@ -137,9 +141,12 @@ html,body,#app{
   line-height: 53px;
   color: #fff;
 }
+.asied-ccc{
+}
 .asidea{
   display: inline-block;
   width: 80%;
+  margin-left: -4px;
 }
 .tag{
   margin-top: 10px;
@@ -160,7 +167,7 @@ html,body,#app{
   height: 40px;
   background: #f2f4f7;
   line-height: 40px;
-  width: 1550px;
+  width: 1300px;
 }
 .liebiao span{
   text-align: center;
@@ -170,7 +177,7 @@ html,body,#app{
 .tr{
   height: 50px;
   line-height: 50px;
-  width: 1550px;
+  width: 1300px;
 }
 .tr button,.tr span{
   vertical-align: middle;
@@ -195,7 +202,7 @@ html,body,#app{
   line-height: 30px;
   border:1px solid #ccc;
   text-align: center;
-  color: #ccc;
+  color: #000;
 }
 .xitong3{
   height: 60px;
@@ -210,8 +217,10 @@ html,body,#app{
 .tag-b{
   background: #ccc;
   position: fixed;
-  width: 100%;
-  top: 64px;
+  top:0;
+  width: 1550px;
+  height:34px;
+  line-height: 34px;
   z-index: 10;
 }
 .tag{

@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 
 
+import transaction from '@/components/login'
+import hello from '@/components/hello'
 
 import Cur from '@/components/Cur/Cur'
 import Cur1 from '@/components/Cur/Cur1'
@@ -19,9 +21,14 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      path: '/login',
+      name: 'transaction',
+      component: transaction
+    },
+    {
+      path: '/hello',
+      name: 'hello',
+      component: hello
     },
     {
       path: '/Cur',

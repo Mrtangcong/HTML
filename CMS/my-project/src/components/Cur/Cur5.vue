@@ -1,22 +1,20 @@
 <template>
   <div class="asidea">
     <div class="tag-b">
-      <el-tag closable class="tag">个人中心</el-tag>
+      你当前位置 ：个人中心
     </div>
-    <div class="height100"></div>
     <div class="height100"></div>
     <div class="hhhh">
       <div class="hl">
-    	<div><span class="xitong1">用户编号</span> <div type="text" class="xitong2" v-model="input1"></div></div>
-    	<div><span class="xitong1">用户名</span> <div type="text" class="xitong2" v-model="input2"></div></div>
-    	<div><span class="xitong1">手机号码</span> <div type="text" class="xitong2" v-model="input3"></div></div>
-    	<div><span class="xitong1">职位</span> <div type="text" class="xitong2" v-model="input4"></div></div>
-    	<div><span class="xitong1">部门</span> <div type="text" class="xitong2" v-model="input5"></div></div>
-    	<div><span class="xitong1">所属管理组</span> <div type="text" class="xitong2" v-model="input6"></div></div>
-    	<div><span class="xitong1">状态</span> <div type="text" class="xitong2" v-model="input7"></div></div>
-    	<div><span class="xitong1">添加人</span> <div type="text" class="xitong2" v-model="input8"></div></div>
-    	<div><span class="xitong1">登录密码</span> <div type="text" class="xitong2" v-model="input9"></div></div>
-    	<div><span class="xitong1">用户编号</span> <div type="text" class="xitong2" v-model="input10"></div></div>
+    	<div><span class="xitong1">用户编号</span> <div type="text" class="xitong2" v-model="input1">{{list.id}}</div></div>
+    	<div><span class="xitong1">用户名</span> <div type="text" class="xitong2" v-model="input2">{{list.loginName}}</div></div>
+    	<div><span class="xitong1">手机号码</span> <div type="text" class="xitong2" v-model="input3">{{list.mobile}}</div></div>
+    	<div><span class="xitong1">职位</span> <div type="text" class="xitong2" v-model="input4">{{list.loginName}}</div></div>
+    	<div><span class="xitong1">状态</span> <div type="text" class="xitong2" v-model="input7">{{list.status}}</div></div>
+    	<div><span class="xitong1">添加时间</span> <div type="text" class="xitong2">{{list.createDate}}</div></div>
+    	<div><span class="xitong1">添加人</span> <div type="text" class="xitong2" v-model="input8">{{list.realName}}</div></div>
+    	<div><span class="xitong1">登录密码</span> <div type="text" class="xitong2" v-model="input9">{{list.password}}</div></div>
+    	
       </div>
       <div class="hr">
     	权限地图
@@ -24,12 +22,12 @@
     		<el-tree
 		  :data="data4"
 		  :props="defaultProps"
-		  node-key="id"
-		  show-checkbox
-		  default-expand-all="true"
+		  node-key="id"		  
+		  :default-expand-all="true"
 		  :expand-on-click-node="false"
-		  :default-checked-keys="[1,2,3,4,5,6,7,8,9,10]"
-		  :render-content="renderContent">
+		  ref="tree1"
+		  :render-content="renderContent"
+		  >
 			</el-tree>
     	</div>
     	
@@ -39,6 +37,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import apidomain from '../../router/luyou.js'
 export default {
   name: 'Cur-5',
   data () {
@@ -53,45 +53,59 @@ export default {
       input8:'',
       input9:'',
       input10:'',
-      data4: [{
-          id: 1,
-          label: '一级 1',
-          children: [{
-            id: 2,
-            label: '二级 1-1',
-            children: [{
-              id: 3,
-              label: '三级 1-1-1'
-            }, {
-              id: 4,
-              label: '三级 1-1-2'
-            }]
-          }]
-        }, {
-          id: 5,
-          label: '一级 2',
-          children: [{
-            id: 6,
-            label: '二级 2-1'
-          }, {
-            id: 7,
-            label: '二级 2-2'
-          }]
-        }, {
-          id: 8,
-          label: '一级 3',
-          children: [{
-            id: 9,
-            label: '二级 3-1'
-          }, {
-            id: 10,
-            label: '二级 3-2'
-          }]
-        }],
+      true:[],
+      list:[],
+      data4: [],
+      username:'',
+      token:'',
         defaultProps: {
           children: 'children',
           label: 'label'
         },
+    }
+  },mounted(){
+  	var that = this;
+  	that.username=localStorage.getItem("token")
+    that.token=localStorage.getItem("tokens")
+    axios({
+        method:'POST',
+        baseURL:(apidomain.apidomain + 'oss/user/'+ that.username),
+        headers:{"sso_token":that.token,"sso_loginname":that.username},
+    })
+	    .then(function(res){
+	      
+	      that.list = res.data.data
+	      that.true = res.data.data.menus
+	    })
+	axios({
+        method:'POST',
+        baseURL:(apidomain.apidomain + 'oss/menu/getAll'),
+        headers:{"sso_token":that.token,"sso_loginname":that.username},
+    })
+    .then(function(res){
+      
+      that.data4 = res.data.data
+    })
+    
+  },methods:{
+  	th1(data){
+  		var that = this;
+  		for(var i=0;i<that.true.length;i++){
+  			if(that.true[i] == data){
+  				return that.true[i]
+  			}
+  			
+  		}
+  	},
+  	renderContent(h, { node, data, store }) {
+        return (
+          	<span style="flex: 1; display: flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+            <span>
+              <span>&nbsp;&nbsp;&nbsp;{data.label} <span v-show={data.id == this.th1(data.id)&&data.id != null}>&nbsp;&nbsp;<i class="el-icon-check"></i></span></span>
+            </span>
+            <span>
+            </span>
+          </span>)
     }
   }
 }
@@ -113,5 +127,9 @@ export default {
 .ditu{
 	padding: 20px;
 	border: 1px dashed #ccc;
+}
+.el-icon-check{
+	font-size:18px;
+	font-weight: 900;
 }
 </style>
